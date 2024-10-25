@@ -1,0 +1,47 @@
+//先排序，再使用双指针查找，时间复杂度O(NlogN)，空间复杂度O(n);
+class Solution {
+public:
+    struct num{
+        int x;
+        int index;
+    };
+    vector<int> twoSum(vector<int>& nums, int target) {
+        vector<num>a(nums.size());
+        vector<int>twosum(2);
+        for(int i=0;i<nums.size();i++){
+            a[i].x=nums[i];
+            a[i].index=i;
+        }
+        sort(a.begin(), a.end(), [](const num &a, const num &b) {
+        return a.x < b.x || (a.x == b.x && a.index < b.index);
+        });
+        for(int i=0,j=a.size()-1;i<j;){
+            if((a[i].x+a[j].x)<target){
+                i++;
+            }else if((a[i].x+a[j].x)>target){
+                j--;
+            }else{
+                twosum[0]=a[i].index;
+                twosum[1]=a[j].index;
+                break;
+            }
+        }
+        return twosum;
+    }
+};
+//使用哈希表，时间空间复杂度都为O(N)
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        map<int, int> hashtable;
+        for (int i = 0; i < nums.size(); ++i) {
+            auto it = hashtable.find(target - nums[i]);
+            if (it != hashtable.end()) {
+                return {it->second, i};
+            }
+            hashtable[nums[i]] = i;
+        }
+        return {};
+    }
+};
+
